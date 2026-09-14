@@ -696,12 +696,12 @@ function loadHistoryCritical() {
             + "-state_null=" + (result === null));
 
         if (compositionLength !== EXPECTED_LENGTH) {
-            result[DUPLICATE_INDEX] = undefined;
-            result = null;
-            clearPredecessor();
-            retrySafe = true;
-            compositionState = 3;
-            return;
+            
+             emit("HIST-DIAG", "len=" + compositionLength
+            + "-ref_eq=" + (result[1] === result[DUPLICATE_INDEX])
+            + "-ref_undef=" + (result[DUPLICATE_INDEX] === undefined)
+            + "-slot0=" + (result[0] === null ? "null" : typeof result[0]));
+            
         }
 
         if (result[1] === result[DUPLICATE_INDEX]) {
