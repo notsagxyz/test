@@ -698,9 +698,18 @@ function loadHistoryCritical() {
         if (compositionLength !== EXPECTED_LENGTH) {
             
              emit("HIST-DIAG", "len=" + compositionLength
-            + "-ref_eq=" + (result[1] === result[DUPLICATE_INDEX])
-            + "-ref_undef=" + (result[DUPLICATE_INDEX] === undefined)
-            + "-slot0=" + (result[0] === null ? "null" : typeof result[0]));
+             + "-ref_eq=" + (result[1] === result[DUPLICATE_INDEX])
+             + "-ref_undef=" + (result[DUPLICATE_INDEX] === undefined)
+             + "-slot2_ctor=" + (result[2] && result[2].constructor && result[2].constructor.name)
+             + "-slot1_ctor=" + (result[1] && result[1].constructor && result[1].constructor.name)
+             + "-slot2_isAB=" + (result[2] instanceof ArrayBuffer)
+             + "-slot2_isTA=" + ArrayBuffer.isView(result[2])
+             + "-slot1_marker=" + (result[1] && result[1].marker)
+             + "-slot2_marker=" + (result[2] && result[2].marker)
+             + "-slot2_len=" + (result[2] && result[2].length)
+             + "-slot0_ctrl=" + result[0xffff]
+             + "-slot2_keys=" + (result[2] && typeof result[2] === "object"
+             ? Object.getOwnPropertyNames(result[2]).slice(0, 5).join("|") : "-"));
             
         }
 
@@ -720,7 +729,13 @@ function loadHistoryCritical() {
         result = null;
 
         readBytes(rwHeader, candidate, CELL_BYTES);
-        rwHeaderCaptured = true;
+        emit("HIST-AFTER-READ",
+        "rw0=" + rwHeader[0]
+         + "-rw4=" + rwHeader[4]
+         + "-rwSID=" + uint32At(rwHeader, 0).toString(16)
+         + "-cand0=" + (candidate && candidate[0] !== undefined ? candidate[0] : "undef")
+         + "-cand_isAB=" + (candidate instanceof ArrayBuffer));
+         rwHeaderCaptured = true;
 
         const rwSID = uint32At(rwHeader, 0);
         const rwButterfly = low48At(rwHeader, 8);
