@@ -689,6 +689,12 @@ function loadHistoryCritical() {
         result = history.state;
         compositionLength = result.length;
 
+        emit("HIST-LEN", "got=" + compositionLength
+            + "-want=" + EXPECTED_LENGTH
+            + "-hex_got=" + (compositionLength >>> 0).toString(16)
+            + "-hex_want=" + EXPECTED_LENGTH.toString(16)
+            + "-state_null=" + (result === null));
+
         if (compositionLength !== EXPECTED_LENGTH) {
             result[DUPLICATE_INDEX] = undefined;
             result = null;
