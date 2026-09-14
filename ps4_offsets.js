@@ -1137,6 +1137,7 @@ PS4["13.52"] = Object.assign({}, PS4["13.00"], PS4["13.52"], {
     alias_of: "13.00",
     fw_status: "state=proven-13.52 webkit=shares-13.00 kernel_rvas=custom-offsets-supplied kpatch=1300.bin bug=poops",
     kpatch: "1300.bin",
+    k__error: 0x2a0f0, // Ajuste del desfasaje 0x3cd0 en FW 13.52
 });
 
 
