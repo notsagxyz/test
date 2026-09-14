@@ -122,6 +122,36 @@ let allDone = false;
 
 (async function () {
     let p = null;
+    //test
+    try {
+        history.replaceState({ t: [1,2,3] }, "");
+        const s = history.state;
+        mark("HIST-SMALL", s && s.t ? "ok-len=" + s.t.length : "null");
+    } catch (e) { mark("HIST-SMALL", "THREW " + e.message); }
+
+    try {
+        const arr = [];
+        for (let i = 0; i < 0x4000; i++) arr.push({});
+        history.replaceState({ t: arr, r: arr, r2: arr }, "");
+        const s = history.state;
+        mark("HIST-MED", s && s.t ? "ok-len=" + s.t.length : "null");
+    } catch (e) { mark("HIST-MED", "THREW " + e.message); }
+
+    try {
+        const arr = [];
+        for (let i = 0; i < 0xfffd; i++) arr.push({});
+        history.replaceState({ t: arr, r: arr, r2: arr }, "");
+        const s = history.state;
+        mark("HIST-BIG", s && s.t ? "ok-len=" + s.t.length : "null");
+    } catch (e) { mark("HIST-BIG", "THREW " + e.message); }
+
+    try {
+        history.replaceState(1n << 40n, "");
+        mark("HIST-BIGINT", String(history.state));
+    } catch (e) { mark("HIST-BIGINT", "THREW " + e.message); }
+    // ---- fin diagnóstico ----
+
+    
     try {
 
         const NUM_IOV_WORKER = params.has("iov")
